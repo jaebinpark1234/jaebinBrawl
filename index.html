@@ -13,122 +13,57 @@
         }
         .container { max-width: 1000px; margin: auto; background: rgba(0, 0, 0, 0.7); padding: 20px; border-radius: 10px; }
         .product { border: 1px solid #ddd; padding: 15px; margin: 10px; display: inline-block; background: rgba(255, 255, 255, 0.8); color: black; }
-        .cart { margin-top: 20px; padding: 10px; border-top: 2px solid #fff; }
-        .checkout { margin-top: 20px; padding: 15px; border: 2px solid #fff; }
+        .cart, .checkout, .wallet { margin-top: 20px; padding: 10px; border-top: 2px solid #fff; }
         .hidden { display: none; }
-        .menu { position: absolute; top: 10px; right: 10px; font-size: 24px; cursor: pointer; }
-        .menu-content { position: absolute; top: 40px; right: 10px; background: white; color: black; padding: 10px; display: none; }
-        .menu-content a { display: block; padding: 5px; text-decoration: none; color: black; }
     </style>
 </head>
 <body>
-    <div class="menu" onclick="toggleMenu()">⋮</div>
-    <div class="menu-content" id="menu-content">
-        <a href="#" onclick="showLogin()">로그인</a>
-        <a href="#" onclick="showSignup()">회원가입</a>
-    </div>
-    
     <div class="container">
         <h1>JaebinBrawl</h1>
+        
+        <div class="wallet">
+            <h2>포인트 충전</h2>
+            <p>내 포인트: <strong><span id="user-balance">0</span>원</strong></p>
+            <input type="number" id="charge-amount" placeholder="충전 금액 입력">
+            <button onclick="chargeWallet()">충전하기</button>
+        </div>
+        
         <div id="product-list">
             <div class="product">
                 <h2>관전자봇 프리미엄</h2>
                 <p>가격: 10,000원</p>
-                <button onclick="addToCart('관전자봇 프리미엄', 10000)">장바구니 추가</button>
+                <button onclick="purchaseItem('관전자봇 프리미엄', 10000, 'https://example.com/link1')">구매하기</button>
             </div>
             <div class="product">
                 <h2>키트핵</h2>
                 <p>가격: 20,000원</p>
-                <button onclick="addToCart('키트핵', 20000)">장바구니 추가</button>
+                <button onclick="purchaseItem('키트핵', 20000, 'https://example.com/link2')">구매하기</button>
             </div>
-        </div>
-        <div class="cart">
-            <h2>장바구니</h2>
-            <ul id="cart-list"></ul>
-            <p><strong>총 가격: <span id="total-price">0</span>원</strong></p>
-            <button onclick="showCheckout()">결제하기</button>
-        </div>
-        <div class="checkout hidden" id="checkout">
-            <h2>결제 페이지</h2>
-            <p>총 결제 금액: <strong><span id="checkout-price">0</span>원</strong></p>
-            <button onclick="redirectToDiscord()">디스코드에서 마저 결제하기</button>
-            <button onclick="redirectToKakao()">카카오톡에서 마저 결제하기</button>
         </div>
     </div>
     
-    <audio autoplay loop>
-        <source src="background.mp3" type="audio/mpeg">
-        브라우저가 오디오 태그를 지원하지 않습니다.
-    </audio>
-
-    <div id="auth" class="hidden">
-        <h2>로그인 / 회원가입</h2>
-        <input type="email" id="email" placeholder="이메일">
-        <input type="password" id="password" placeholder="비밀번호">
-        <button onclick="login()">로그인</button>
-        <button onclick="signup()">회원가입</button>
-    </div>
-
     <script>
-        function toggleMenu() {
-            let menu = document.getElementById('menu-content');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        }
-        
-        function showLogin() {
-            document.getElementById('auth').classList.remove('hidden');
-        }
-        function showSignup() {
-            document.getElementById('auth').classList.remove('hidden');
-        }
-        
-        function login() {
-            let email = document.getElementById('email').value;
-            let password = document.getElementById('password').value;
-            let storedPassword = localStorage.getItem(email);
-            if (storedPassword === password) {
-                alert('로그인 성공!');
+        let balance = 0;
+        function chargeWallet() {
+            let amount = parseInt(document.getElementById('charge-amount').value);
+            if (amount > 0) {
+                balance += amount;
+                document.getElementById('user-balance').textContent = balance;
+                alert(`포인트 ${amount}원이 충전되었습니다!`);
             } else {
-                alert('이메일 또는 비밀번호가 틀렸습니다.');
+                alert('올바른 금액을 입력하세요.');
             }
         }
         
-        function signup() {
-            let email = document.getElementById('email').value;
-            let password = document.getElementById('password').value;
-            localStorage.setItem(email, password);
-            alert('회원가입 완료! 이제 로그인하세요.');
-        }
-        
-        let cart = [];
-        function addToCart(name, price) {
-            cart.push({ name, price });
-            updateCart();
-        }
-        function updateCart() {
-            let cartList = document.getElementById('cart-list');
-            let totalPrice = document.getElementById('total-price');
-            cartList.innerHTML = '';
-            let sum = 0;
-            cart.forEach(item => {
-                let li = document.createElement('li');
-                li.textContent = `${item.name} - ${item.price}원`;
-                cartList.appendChild(li);
-                sum += item.price;
-            });
-            totalPrice.textContent = sum;
-        }
-        function showCheckout() {
-            let checkout = document.getElementById('checkout');
-            let checkoutPrice = document.getElementById('checkout-price');
-            checkoutPrice.textContent = document.getElementById('total-price').textContent;
-            checkout.classList.remove('hidden');
-        }
-        function redirectToDiscord() {
-            window.location.href = 'https://discord.gg/tJcGgyTxg8';
-        }
-        function redirectToKakao() {
-            window.location.href = 'https://open.kakao.com/o/sggIQhMe';
+        function purchaseItem(name, price, link) {
+            if (balance >= price) {
+                balance -= price;
+                document.getElementById('user-balance').textContent = balance;
+                alert(`구매 완료! 상품: ${name}\n다운로드 링크: ${link}`);
+                window.open(link, '_blank');
+            } else {
+                alert('잔액이 부족합니다. 포인트를 충전하세요!');
+            }
         }
     </script>
 </body>
