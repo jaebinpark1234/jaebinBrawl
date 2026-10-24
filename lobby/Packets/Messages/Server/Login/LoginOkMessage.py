@@ -24,8 +24,8 @@ class LoginOkMessage(Writer):
         self.writeString() # Gamecenter ID
 
         self.writeInt(26)   # Major Version
-        self.writeInt(getattr(self.player, 'build', 165) or 165)  # Build
-        self.writeInt(getattr(self.player, 'minor', 1) or 1)    # Minor Version
+        self.writeInt(184)  # Build (v26.184)
+        self.writeInt(1)    # Minor Version
 
         self.writeString("dev")  # Environment
 
@@ -40,18 +40,15 @@ class LoginOkMessage(Writer):
         self.writeInt(0)
 
         self.writeString()
-
-        self.writeString("RU") # Region
+        self.writeString(getattr(self.player, 'region', 'KR') or 'KR') # Region
         self.writeString()
 
         self.writeInt(1)
-
-        self.writeString()  
-        self.writeString() 
         self.writeString()
 
-        self.writeVint(0)
-
+        self.writeInt(2)
+        self.writeString()
         self.writeString()
 
-        self.writeVint(1)
+        self.writeInt(1)
+        self.writeString()

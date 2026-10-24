@@ -154,9 +154,9 @@ class OwnHomeDataMessage(Writer):
 
         self.writeVint(0)  # array
         
-        self.writeVint(8)  # Event slot count (클라이언트 UI 슬롯은 8 고정)
-        for i in range(8):
-            self.writeVint(i)
+        self.writeVint(len(EventSlots.maps))  # Event slot count
+        for i in range(len(EventSlots.maps)):
+            self.writeVint(i + 1)
 
         # Logic Events
         count = len(EventSlots.maps)
@@ -164,9 +164,9 @@ class OwnHomeDataMessage(Writer):
 
         for i, map in enumerate(EventSlots.maps):
             slot_id = i + 1
-            self.writeVint(slot_id)
-            self.writeVint(slot_id)
-            self.writeVint(map['Ended'])  # IsActive | 0 = Active, 1 = Disabled
+            self.writeVint(0) # Event Index in Teams
+            self.writeVint(slot_id) # Event Index
+            self.writeVint(0) # NewEventTimer
             self.writeVint(Helpers.EventTimer(self))  # Timer
 
             self.writeVint(map['Tokens'])
@@ -179,14 +179,9 @@ class OwnHomeDataMessage(Writer):
             self.writeVint(0)  # Powerplay game played
             self.writeVint(3)  # Powerplay game left maximum
 
-            if map['Modifier'] > 0:
-                self.writeBoolean(True)  # Gamemodifier boolean
-                self.writeVint(1)  # ModifierID
-            else:
-                self.writeBoolean(False)
-
-            self.writeVint(0)
-            self.writeVint(0) # Championship Array?
+            self.writeVint(0)  # Modifiers array count
+            self.writeVint(0)  # Special Events Difficulty
+            self.writeVint(0)  # Championship / ChallengeType
 
         self.writeVint(0)
 
