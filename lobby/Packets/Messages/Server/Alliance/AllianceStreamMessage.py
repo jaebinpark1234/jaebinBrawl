@@ -16,30 +16,38 @@ class AllianceStreamMessage(Writer):
 
     def encode(self):
         if self.clubLowID != 0:
-            DataBase.GetmsgCount(self, self.clubLowID)
-            self.writeVint(self.MessageCount) # Message count
-            db = TinyDB('Database/Club/chat.db')
-            query = Query()
-            data = db.search(query.clubID == self.player.club_low_id)
-            data = data[0]
-            for i in range(1, self.MessageCount + 1):
-                self.writeVint(data['info'][str(i)]['Event'])
-                self.writeVint(0)
-                self.writeVint(data['info'][str(i)]['Tick'])
-                self.writeVint(0)
-                self.writeVint(data['info'][str(i)]['PlayerID'])
-                self.writeString(data['info'][str(i)]['PlayerName'])
-                self.writeVint(data['info'][str(i)]['PlayerRole'])
-                self.writeVint(0)
-                self.writeVint(0)
-                if data['info'][str(i)]['Event'] == 4:
-                    self.writeVint(data['info'][str(i)]['Message'])  # 1 = Kicked, 2 = Join request accepted, 3 = Join the club, 4 = Leave the club
-                    self.writeVint(1)
+            try:
+                DataBase.GetmsgCount(self, self.clubLowID)
+                db = TinyDB('Database/Club/chat.db')
+                query = Query()
+                data = db.search(query.clubID == self.player.club_low_id)
+                if not data:
+                    self.writeVint(0)
+                    return
+                data = data[0]
+                msg_count = min(getattr(self, 'MessageCount', 0), len(data.get('info', {})))
+                self.writeVint(msg_count)
+                for i in range(1, msg_count + 1):
+                    if str(i) not in data.get('info', {}):
+                        continue
+                    self.writeVint(data['info'][str(i)]['Event'])
+                    self.writeVint(0)
+                    self.writeVint(data['info'][str(i)]['Tick'])
                     self.writeVint(0)
                     self.writeVint(data['info'][str(i)]['PlayerID'])
                     self.writeString(data['info'][str(i)]['PlayerName'])
-                else:
-                    self.writeString(data['info'][str(i)]['Message'])
-
+                    self.writeVint(data['info'][str(i)]['PlayerRole'])
+                    self.writeVint(0)
+                    self.writeVint(0)
+                    if data['info'][str(i)]['Event'] == 4:
+                        self.writeVint(data['info'][str(i)]['Message'])  # 1 = Kicked, 2 = Join request accepted, 3 = Join the club, 4 = Leave the club
+                        self.writeVint(1)
+                        self.writeVint(0)
+                        self.writeVint(data['info'][str(i)]['PlayerID'])
+                        self.writeString(data['info'][str(i)]['PlayerName'])
+                    else:
+                        self.writeString(data['info'][str(i)]['Message'])
+            except Exception:
+                self.writeVint(0)
         else:
             self.writeVint(0)

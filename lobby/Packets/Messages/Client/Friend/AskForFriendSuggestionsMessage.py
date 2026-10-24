@@ -14,8 +14,11 @@ class AskForFriendSuggestionsMessage(BSMessageReader):
 
     def process(self):
         def by_trophy(plr):
-                return plr['trophies']
+            return plr.get('trophies', 0)
                 
-        players = DataBase.getAllPlayers(self)
-        players.sort(key = by_trophy, reverse=True)
-        AddableFriendsMessage(self.client, self.player, players).send()
+        try:
+            players = DataBase.getAllPlayers(self)
+            players.sort(key=by_trophy, reverse=True)
+            AddableFriendsMessage(self.client, self.player, players).send()
+        except Exception:
+            AddableFriendsMessage(self.client, self.player, []).send()

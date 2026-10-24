@@ -134,15 +134,19 @@ class DataBase:
 
     def getAllPlayers(self):
         db = TinyDB('Database/Player/data.db')
-        query = Query()
-        name_list =[]
-
+        player_list = []
         for i in db.all():
-            token = i['token']
-            name = db.search(query.token == str(token))[0]['info']
-            name_list.append(name)
-
-        return name_list
+            info = i.get('info', {})
+            if isinstance(info, dict) and 'lowID' in info and 'name' in info:
+                # 안전한 기본값 채우기
+                info.setdefault('trophies', 0)
+                info.setdefault('clubID', 0)
+                info.setdefault('clubRole', 0)
+                info.setdefault('profileIcon', 0)
+                info.setdefault('namecolor', 0)
+                info.setdefault('playerExp', 0)
+                player_list.append(info)
+        return player_list
 
     def getSpecifiedValue(self, value_name):
         db = TinyDB('Database/Player/data.db')
@@ -320,8 +324,19 @@ class DataBase:
         db = TinyDB('Database/Club/club.db')
         query = Query()
         data = db.search(query.clubID == clubid)
-        club_data = data[0]
         self.plrids = []
+        if not data:
+            self.clubName = "재빈브롤"
+            self.clubdescription = ""
+            self.clubregion = "KR"
+            self.clubbadgeID = 0
+            self.clubtype = 1
+            self.clubtrophiesneeded = 0
+            self.clubfriendlyfamily = 0
+            self.clubtrophies = 0
+            self.clubmembercount = 0
+            return
+        club_data = data[0]
         self.clubName = club_data["info"]["name"]
         self.clubdescription = club_data["info"]["description"]
         self.clubregion = club_data["info"]["region"]
@@ -331,7 +346,7 @@ class DataBase:
         self.clubfriendlyfamily = club_data["info"]["friendlyfamily"]
         self.clubtrophies = club_data["info"]["trophies"]
         self.clubmembercount = club_data["info"]["members"]["totalmembers"]
-        for plridentifier, data in club_data["info"]["members"].items():
+        for plridentifier, pdata in club_data["info"]["members"].items():
             if plridentifier != "totalmembers":
                 self.plrids.append(int(plridentifier))
 
@@ -405,9 +420,13 @@ class DataBase:
     def GetmsgCount(self, clubID):
         db = TinyDB('Database/Club/chat.db')
         query = Query()
-        data = db.search(query.clubID == self.player.club_low_id)
+        target_id = clubID if clubID else getattr(self.player, 'club_low_id', 0)
+        data = db.search(query.clubID == target_id)
+        if not data:
+            self.MessageCount = 0
+            return
         data = data[0]
-        self.MessageCount = data['info']['Total']
+        self.MessageCount = data['info'].get('Total', 0)
 
     def Addmsg(self, clubID, event, tick, Low_id, name, role, msg):
         db = TinyDB('Database/Club/chat.db')

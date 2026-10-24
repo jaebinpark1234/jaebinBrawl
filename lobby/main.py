@@ -76,14 +76,19 @@ class ClientThread(Thread):
 
 					if packet_id in packets:
 						_(f'Received packet! Id: {packet_id}')
-						message = packets[packet_id](self.client, self.player, data)
-						message.decode()
-						message.process()
+						try:
+							message = packets[packet_id](self.client, self.player, data)
+							message.decode()
+							message.process()
 
-						if packet_id == 10101:
-							Server.Clients["Clients"][str(self.player.low_id)] = {"SocketInfo": self.client}
-							Server.Clients["ClientCounts"] = Server.ThreadCount
-							self.player.ClientDict = Server.Clients
+							if packet_id == 10101:
+								Server.Clients["Clients"][str(self.player.low_id)] = {"SocketInfo": self.client}
+								Server.Clients["ClientCounts"] = Server.ThreadCount
+								self.player.ClientDict = Server.Clients
+						except Exception as e:
+							print(f'[ERROR] Packet {packet_id} failed: {e}')
+							import traceback
+							traceback.print_exc()
 
 					else:
 						_(f'Packet not handled! Id: {packet_id}')

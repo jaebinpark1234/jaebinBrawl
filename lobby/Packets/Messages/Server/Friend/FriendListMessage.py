@@ -2,10 +2,11 @@ from Utils.Writer import Writer
 
 class FriendListMessage(Writer):
 
-    def __init__(self, client, player):
+    def __init__(self, client, player, players=None):
         super().__init__(client)
         self.id = 20105
         self.player = player
+        self.players = players or []
 
     def encode(self):
         self.writeVint(1)

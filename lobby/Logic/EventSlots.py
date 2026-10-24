@@ -62,9 +62,9 @@ class EventSlots:
             'Tokens': 10
         },
 
-        # Slot 7: 주말 특별 이벤트 - 보스전 (57)
+        # Slot 7: 주말 특별 이벤트 - 빅 게임 / 보스전 (21)
         {
-            'ID': 57,
+            'ID': 21,
             'Status': 2,
             'Ended': False,
             'Modifier': 0,
