@@ -1,0 +1,12 @@
+services:
+  jaebinbrawl:
+    build: .
+    container_name: jaebinbrawl-v26
+    ports:
+      - "9339:9339/tcp"   # 로비 서버 (로그인/홈/클럽/순위표/팀방)
+      - "1337:1337/udp"   # 배틀 서버 (실시간 전투)
+    environment:
+      BATTLE_PORT: "1337"
+      BATTLE_SERVER_IP: "127.0.0.1"   # 컨테이너 안에서 두 서버가 같이 뜬다
+      LOBBY_PORT: "9339"
+    restart: unless-stopped

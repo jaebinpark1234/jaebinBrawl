@@ -1,0 +1,7 @@
+# build/runtime artifacts
+**/bin/
+**/obj/
+__pycache__/
+*.pyc
+Database/BattleLog/*.json
+.DS_Store
