@@ -73,7 +73,7 @@ dotnet "$BATTLE_DLL" &
 BATTLE_PID=$!
 
 log "로비 서버 구동 (TCP $LOBBY_PORT)"
-(cd lobby && exec python3 main.py) &
+(cd lobby && exec python3 -u main.py) &
 LOBBY_PID=$!
 
 trap 'kill $BATTLE_PID $LOBBY_PID 2>/dev/null || true' EXIT INT TERM

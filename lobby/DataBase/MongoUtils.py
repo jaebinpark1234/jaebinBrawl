@@ -1,0 +1,44 @@
+class MongoUtils:
+    def insert_data(self, collection,  data):
+        collection.insert_one(data)
+
+
+    def update_document(self, collection, query, item, value):
+        collection.update_one(query, { "$set": { item: value } })
+
+
+    def update_all_documents(self, collection, query, item, value):
+        collection.update_many(query, { "$set": { item: value } })
+
+
+    def delete_document(self, collection, args):
+        collection.delete_one(args)
+
+
+    def delete_all_documents(self, collection, args):
+        collection.delete_many(args)
+
+
+    def load_document(self, collection, args):
+        return collection.find_one(args)
+
+
+    def load_all_documents(self, collection, args):
+        doc_list = []
+        cursor = collection.find(args)
+        for document in cursor:
+            doc_list.append(document)
+
+        return doc_list
+
+    def load_all_documents_sorted(self, collection, args, element, element2):
+        doc_list = []
+
+        for document in collection.find(args).sort(element):
+            del document["_id"]
+
+            if element2 is not None:
+                if document.get(element2, 0) != 0: doc_list.append(document)
+            else: doc_list.append(document)
+
+        return doc_list

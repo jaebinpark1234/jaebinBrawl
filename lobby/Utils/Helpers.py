@@ -1,54 +1,93 @@
-import string
-import random
-import time
+import json, string, random
+try:
+    from colorama import Fore
+except ImportError:
+    class Fore:
+        YELLOW = ''
+        GREEN = ''
+        LIGHTBLUE_EX = ''
+        CYAN = ''
+        RED = ''
+        RESET = ''
+
 
 class Helpers:
+    connected_clients = {"ClientsCount": 0, "Clients": {}}
 
-    def randomStringDigits(self):
-        """Generate a random string of letters and digits """
+    yellow = Fore.YELLOW
+    green = Fore.GREEN
+    blue = Fore.LIGHTBLUE_EX
+    cyan = Fore.CYAN
+    red = Fore.RED
+    reset = Fore.RESET
+
+    def randomToken(self):
         lettersAndDigits = string.ascii_letters + string.digits
         return ''.join(random.choice(lettersAndDigits) for i in range(40))
 
-    def randomID(self):
-        length = 9
+    def randomID(self, length = 8):
         return int(''.join([str(random.randint(0, 9)) for _ in range(length)]))
 
-    def randomClubID(self):
-        length = 9
-        return int(''.join([str(random.randint(0, 9)) for _ in range(length)]))
-    
-    def LeaderboardTimer(self):
-        result = time.localtime(int(time.time()))
-        day = (result.tm_sec + (result.tm_min * 60) + (result.tm_hour * 3600) + (result.tm_mday * 86400))
-        month = result.tm_mon
-        if month == 1:
-        	seconds = 2764800
-        elif month == 2:
-        	seconds = 2505600
-        elif month == 3:
-        	seconds = 2764800
-        elif month == 4:
-        	seconds = 2678400
-        elif month == 5:
-        	seconds = 2764800
-        elif month == 6:
-        	seconds = 2678400
-        elif month == 7:
-        	seconds = 2764800
-        elif month == 8:
-        	seconds = 2764800
-        elif month == 9:
-        	seconds = 2678400
-        elif month == 10:
-        	seconds = 2764800
-        elif month == 11:
-        	seconds = 2678400
-        elif month == 12:
-        	seconds = 2764800
+    def randomMapID(self):
+        return random.randint(1, 2147483647)
 
-        return (seconds - day)
-        
-    def EventTimer(self):
-        result = time.localtime(int(time.time()))
+    def get_box_type(self, id):
+        if id == 5:  # Brawl Box
+            return 10
+        elif id == 4:  # Big Box
+            return 12
+        elif id == 3:  # Shop Mega Box
+            return 11
+        elif id == 1:  # Shop Big Box
+            return 12
 
-        return (86400 - (result.tm_sec + (result.tm_min * 60) + (result.tm_hour * 3600)))
+    def create_config(self):
+        settings = {
+                "MongoConnectionURL": "",
+                "StarPoints": 5000,
+                "Gold": 10000,
+                "Gems": 100000,
+                "Trophies": 0,
+                "ExperiencePoints": 999999,
+                "BrawlBoxTokens": 99999,
+                "BigBoxTokens": 99999,
+                "Region": "RO",
+                "ThemeID": 0,
+                "Maintenance": False,
+                "SecondsTillMaintenanceOver": 3600
+            }
+
+
+        with open('config.json', 'w') as config_file:
+            json.dump(settings, config_file)
+
+    def load_account(self, player_data):
+        self.player.name_set = player_data['NameSet']
+        self.player.name = player_data['Name']
+        self.player.trophies = player_data['Trophies']
+        self.player.gems = player_data['Gems']
+        self.player.resources = player_data['Resources']
+        self.player.token_doubler = player_data['TokenDoubler']
+        self.player.high_trophies = player_data['HighestTrophies']
+        self.player.trophy_reward = player_data['TrophyRoadReward']
+        self.player.exp_points = player_data['ExperiencePoints']
+        self.player.profile_icon = player_data['ProfileIcon']
+        self.player.name_color = player_data['NameColor']
+        self.player.brawlers_unlocked = player_data['UnlockedBrawlers']
+        self.player.brawlers_trophies = player_data['BrawlersTrophies']
+        self.player.brawlers_high_trophies = player_data['BrawlersHighestTrophies']
+        self.player.brawlers_level = player_data['BrawlersLevel']
+        self.player.brawlers_powerpoints = player_data['BrawlersPowerPoints']
+        self.player.unlocked_skins = player_data['UnlockedSkins']
+        self.player.selected_skins = player_data['SelectedSkins']
+        self.player.tickets = player_data['Tickets']
+        self.player.home_brawler = player_data['SelectedBrawler']
+        self.player.region = player_data['Region']
+        self.player.content_creator = player_data['SupportedContentCreator']
+
+
+    def load_club(self, club_data):
+        try:
+            self.player.message_tick = club_data['Messages'][-1]['Tick']
+        except:
+            pass
