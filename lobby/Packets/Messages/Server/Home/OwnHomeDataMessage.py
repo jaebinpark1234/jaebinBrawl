@@ -162,10 +162,10 @@ class OwnHomeDataMessage(Writer):
         count = len(EventSlots.maps)
         self.writeVint(count)
 
-        for map in EventSlots.maps:
-
-            self.writeVint(EventSlots.maps.index(map) + 1)
-            self.writeVint(EventSlots.maps.index(map) + 1)
+        for i, map in enumerate(EventSlots.maps):
+            slot_id = i + 1
+            self.writeVint(slot_id)
+            self.writeVint(slot_id)
             self.writeVint(map['Ended'])  # IsActive | 0 = Active, 1 = Disabled
             self.writeVint(Helpers.EventTimer(self))  # Timer
 

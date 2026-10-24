@@ -28,6 +28,10 @@ class LoginMessage(BSMessageReader):
         self.minor = self.read_int()
         self.build = self.read_int()
 
+        self.player.major = self.major
+        self.player.minor = self.minor
+        self.player.build = self.build
+
         self.fingerprint_sha = self.read_string()
         self.read_int()  # Unknown
 
@@ -63,6 +67,7 @@ class LoginMessage(BSMessageReader):
             self.player.low_id = Helpers.randomID(self)
             self.player.high_id = 0
             self.player.token = Helpers.randomStringDigits(self)
+            DataBase.createAccount(self)
 
             LoginOkMessage(self.client, self.player).send()
             OwnHomeDataMessage(self.client, self.player).send()

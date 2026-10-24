@@ -24,8 +24,8 @@ class LoginOkMessage(Writer):
         self.writeString() # Gamecenter ID
 
         self.writeInt(26)   # Major Version
-        self.writeInt(165)  # Build
-        self.writeInt(1)    # Minor Version
+        self.writeInt(getattr(self.player, 'build', 165) or 165)  # Build
+        self.writeInt(getattr(self.player, 'minor', 1) or 1)    # Minor Version
 
         self.writeString("dev")  # Environment
 

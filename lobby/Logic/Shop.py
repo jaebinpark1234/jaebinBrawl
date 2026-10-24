@@ -28,7 +28,7 @@ class Shop:
 
         {
             'ID': 4,
-            'OfferTitle': '재빈브롤 특가',
+            'OfferTitle': 'Jaebin Brawl Special',
             'Cost': 2,
             'Multiplier': 1,
             'BrawlerID': 0,
@@ -40,7 +40,7 @@ class Shop:
         
         {
             'ID': 10,
-            'OfferTitle': '재빈브롤 PP',
+            'OfferTitle': 'Power Points',
             'Cost': 20,
             'Multiplier': 1,
             'BrawlerID': 0,
@@ -52,7 +52,7 @@ class Shop:
         
         {
             'ID': 8,
-            'OfferTitle': '재빈브롤 코인',
+            'OfferTitle': 'Coins',
             'Cost': 10,
             'Multiplier': 5,
             'BrawlerID': 0,
@@ -64,7 +64,7 @@ class Shop:
         
         {
             'ID': 6,
-            'OfferTitle': '재빈브롤 상자',
+            'OfferTitle': 'Jaebin Brawl Box',
             'Cost': 20,
             'Multiplier': 1,
             'BrawlerID': 0,
@@ -76,7 +76,7 @@ class Shop:
 
         {
             'ID': 10,
-            'OfferTitle': '재빈브롤 메가상자',
+            'OfferTitle': 'Jaebin Brawl Mega Box',
             'Cost': 1500,
             'Multiplier': 1,
             'BrawlerID': 0,
