@@ -86,7 +86,7 @@ class BotProfileMessage(Writer):
             self.writeInt(0) # Club High Id
             self.writeInt(1) # Club Low Id
 
-            self.writeString("Classic Brawl") # Club Name
+            self.writeString("재빈브롤") # Club Name
 
             self.writeVint(8)
             self.writeVint(5) # Badge ID

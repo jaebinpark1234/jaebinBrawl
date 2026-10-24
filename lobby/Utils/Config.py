@@ -28,7 +28,7 @@ class Config:
             "TutorialState": 3,
             "ThemeID": 12,
             "Region": "RO",
-            "SupportedContentCreator": "Classic Brawl",
+            "SupportedContentCreator": "재빈브롤",
             "DoubleTokenEvent": "false",
             "CoinShowerEvent": "false",
             # ── 서버 운영 ──
@@ -37,7 +37,7 @@ class Config:
             "MaintenanceTime": 3600,
             "Patch": False,
             "PatchUrl": "",
-            "UpdateUrl": "https://github.com/PhoenixFire6879/Classic-Brawl",
+            "UpdateUrl": "https://github.com/jaebinpark1234/jaebinBrawl",
             # ── 통합 배틀 서버 연동 ──
             "OnlineBattle": True,        # 온라인 배틀(UDP 1337) 라우팅 on/off
             "BattleServerIp": "127.0.0.1",
