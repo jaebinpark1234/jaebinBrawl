@@ -1,15 +1,15 @@
 {
   "MongoConnectionURL": "",
-  "UpgradesEnabled": false,
+  "UpgradesEnabled": true,
   "ClubWarsEnabled": false,
-  "StarPoints": 5000,
-  "Tickets": 7000,
-  "Gold": 10000,
-  "Gems": 100000,
+  "StarPoints": 0,
+  "Tickets": 0,
+  "Gold": 200,
+  "Gems": 30,
   "Trophies": 0,
-  "ExperiencePoints": 999999,
-  "BrawlBoxTokens": 99999,
-  "BigBoxTokens": 99999,
+  "ExperiencePoints": 0,
+  "BrawlBoxTokens": 0,
+  "BigBoxTokens": 0,
   "Region": "KR",
   "ThemeID": 0,
   "ContentCreatorCodes": [
@@ -22,5 +22,7 @@
   "SecondsTillMaintenanceOver": 3600,
   "Patch": false,
   "PatchURL": "http://192.168.0.103:8080/",
-  "UpdateURL": ""
+  "UpdateURL": "",
+  "BattleServerIp": "127.0.0.1",
+  "BattleServerPort": 1337
 }

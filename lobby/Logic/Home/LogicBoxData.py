@@ -2,6 +2,19 @@ import random
 
 class LogicBoxData:
 
+    def unlock_brawler(self, brawler):
+        if brawler not in self.player.brawlers_unlocked:
+            self.player.brawlers_unlocked.append(brawler)
+            self.player.brawlers_trophies[str(brawler)] = 0
+            self.player.brawlers_high_trophies[str(brawler)] = 0
+            self.player.brawlers_level[str(brawler)] = 0
+            self.player.brawlers_powerpoints[str(brawler)] = 0
+            self.player.db.update_player_account(self.player.token, 'UnlockedBrawlers', self.player.brawlers_unlocked)
+            self.player.db.update_player_account(self.player.token, 'BrawlersTrophies', self.player.brawlers_trophies)
+            self.player.db.update_player_account(self.player.token, 'BrawlersHighestTrophies', self.player.brawlers_high_trophies)
+            self.player.db.update_player_account(self.player.token, 'BrawlersLevel', self.player.brawlers_level)
+            self.player.db.update_player_account(self.player.token, 'BrawlersPowerPoints', self.player.brawlers_powerpoints)
+
     def randomize(self, type):
         self.box_rewards = { 'Rewards': [] }
 
@@ -14,9 +27,7 @@ class LogicBoxData:
                     brawler = random.choice(locked_brawlers)
                     brawler_reward = {'Amount': 1, 'DataRef': [16, brawler], 'Value': 1}
                     self.box_rewards['Rewards'].append(brawler_reward)
-                    if brawler not in self.player.brawlers_unlocked:
-                        self.player.brawlers_unlocked.append(brawler)
-                        self.player.db.update_player_account(self.player.token, 'UnlockedBrawlers',self.player.brawlers_unlocked)
+                    self.unlock_brawler(brawler)
                     check = True
 
             if (random.randint(0,100) < 100) and not check:
@@ -42,9 +53,7 @@ class LogicBoxData:
                     brawler = random.choice(locked_brawlers)
                     brawler_reward = {'Amount': 1, 'DataRef': [16, brawler], 'Value': 1}
                     self.box_rewards['Rewards'].append(brawler_reward)
-                    if brawler not in self.player.brawlers_unlocked:
-                        self.player.brawlers_unlocked.append(brawler)
-                        self.player.db.update_player_account(self.player.token, 'UnlockedBrawlers', self.player.brawlers_unlocked)
+                    self.unlock_brawler(brawler)
 
             if (random.randint(0,100) < 30):
                 bonus = random.choice([2, 8])
@@ -99,9 +108,7 @@ class LogicBoxData:
                     brawler = random.choice(locked_brawlers)
                     brawler_reward = {'Amount': 1, 'DataRef': [16, brawler], 'Value': 1}
                     self.box_rewards['Rewards'].append(brawler_reward)
-                    if brawler not in self.player.brawlers_unlocked:
-                        self.player.brawlers_unlocked.append(brawler)
-                        self.player.db.update_player_account(self.player.token, 'UnlockedBrawlers', self.player.brawlers_unlocked)
+                    self.unlock_brawler(brawler)
 
             if (random.randint(0,100) < 40):
                 bonus = random.choice([2, 8])
@@ -155,9 +162,7 @@ class LogicBoxData:
                     brawler = random.choice(locked_brawlers)
                     brawler_reward = {'Amount': 1, 'DataRef': [16, brawler], 'Value': 1}
                     self.box_rewards['Rewards'].append(brawler_reward)
-                    if brawler not in self.player.brawlers_unlocked:
-                        self.player.brawlers_unlocked.append(brawler)
-                        self.player.db.update_player_account(self.player.token, 'UnlockedBrawlers', self.player.brawlers_unlocked)
+                    self.unlock_brawler(brawler)
 
             if (random.randint(0,100) < 50):
                 bonus = random.choice([2, 8])

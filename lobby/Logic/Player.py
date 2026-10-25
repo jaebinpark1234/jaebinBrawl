@@ -72,7 +72,7 @@ class Player:
     for id in brawlers_id:
         selected_skins.update({f"{id}": 0})
 
-    brawlers_unlocked = [0, 1]
+    brawlers_unlocked = [0]
 
     brawlers_card_id = []
     for x in brawlers_unlocked:
@@ -81,7 +81,7 @@ class Player:
     brawlers_spg = Cards().get_spg_id()
 
     def_trophies = 0
-    def_high_trophies = 99999
+    def_high_trophies = 0
 
     brawlers_trophies = {}
     for x in brawlers_id:

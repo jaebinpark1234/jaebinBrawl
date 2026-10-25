@@ -114,6 +114,15 @@ class Writer:
         else:
             self.writeVInt(0)
 
+    def writeScId(self, x, y=0):
+        return self.writeDataReference(x, y)
+
+    def writeVint(self, data, rotate: bool = True):
+        return self.writeVInt(data, rotate)
+
+    def writeBoolean(self, boolean: bool):
+        return self.writeBool(boolean)
+
 
     def writeString(self, string: str = None):
         if string is None:

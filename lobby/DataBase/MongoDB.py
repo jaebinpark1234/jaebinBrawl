@@ -223,6 +223,15 @@ class MongoDB:
                 for x in self.data:
                     if x not in result:
                         self.update_player_account(token, x, self.data[x])
+                # Sanitize corrupted 35-rank high trophies
+                bht = result.get('BrawlersHighestTrophies', {})
+                if any(v == 99999 for v in bht.values()):
+                    bht = {k: (0 if v == 99999 else v) for k, v in bht.items()}
+                    self.update_player_account(token, 'BrawlersHighestTrophies', bht)
+                    result['BrawlersHighestTrophies'] = bht
+                if result.get('HighestTrophies', 0) == 99999:
+                    self.update_player_account(token, 'HighestTrophies', result.get('Trophies', 0))
+                    result['HighestTrophies'] = result.get('Trophies', 0)
                 result = self.local_db.get_player_by_token(token)
             return result
         else:
@@ -232,6 +241,14 @@ class MongoDB:
                 for x in self.data:
                     if x not in result:
                         self.update_player_account(token, x, self.data[x])
+                bht = result.get('BrawlersHighestTrophies', {})
+                if any(v == 99999 for v in bht.values()):
+                    bht = {k: (0 if v == 99999 else v) for k, v in bht.items()}
+                    self.update_player_account(token, 'BrawlersHighestTrophies', bht)
+                    result['BrawlersHighestTrophies'] = bht
+                if result.get('HighestTrophies', 0) == 99999:
+                    self.update_player_account(token, 'HighestTrophies', result.get('Trophies', 0))
+                    result['HighestTrophies'] = result.get('Trophies', 0)
                 query = {"Token": token}
                 result = self.mongo_utils.load_document(self.players, query)
             return result

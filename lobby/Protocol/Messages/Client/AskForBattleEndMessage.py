@@ -32,4 +32,12 @@ class AskForBattleEndMessage(Reader):
         else:
             self.type = 0
 
+        try:
+            from Logic.BattleLog import save_battle_log
+            map_id = self.mapID[1] if isinstance(self.mapID, (list, tuple)) and len(self.mapID) > 1 else 7
+            trophies = 8 if self.result == 0 else 0
+            save_battle_log(self.player, map_id=map_id, result=self.result, trophies_result=trophies)
+        except Exception as e:
+            print(f"[WARN] Failed to save battle log: {e}")
+
         BattleEndMessage(self.client, self.player, self.type, self.result, self.players).send()

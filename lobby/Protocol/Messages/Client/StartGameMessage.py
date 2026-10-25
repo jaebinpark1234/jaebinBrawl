@@ -1,7 +1,7 @@
 from ByteStream.Reader import Reader
-from Protocol.Messages.Server.TeamMessage import TeamMessage
-from Protocol.Messages.Server.MatchMakingCancelledMessage import MatchMakingCancelledMessage
 from Logic.Home.LogicEventData import LogicEventData
+from Logic.BattleSessions import start_battle
+
 
 class StartGameMessage(Reader):
     def __init__(self, client, player, initial_bytes):
@@ -15,12 +15,11 @@ class StartGameMessage(Reader):
         self.readVInt()
         self.map_slot = self.readVInt()
 
-
     def process(self, db):
         try:
             self.player.map_id = LogicEventData.events[self.map_slot - 1].get("LocationID", 0)
-        except:
+        except Exception:
             self.player.map_id = 7
 
-        MatchMakingCancelledMessage(self.client, self.player).send()
-        TeamMessage(self.client, self.player).send()
+        print(f"[INFO] StartGameMessage: map_slot={self.map_slot}, map_id={self.player.map_id} -> starting battle session")
+        start_battle(self.client, self.player, self.map_slot)

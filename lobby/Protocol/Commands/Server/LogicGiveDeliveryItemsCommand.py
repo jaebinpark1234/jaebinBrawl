@@ -29,7 +29,7 @@ class LogicGiveDeliveryItemsCommand(Writer):
                 self.writeDataReference(*x.get("SPGID", [0, 0]))
                 self.writeVInt(0)
 
-        self.writeBoolean(True) # ForcedDrops
+        self.writeBoolean(False) # ForcedDrops
 
         self.writeVInt(1)
         self.writeVInt(1)

@@ -23,6 +23,7 @@ from Protocol.Messages.Client.LeaveAllianceMessage import LeaveAllianceMessage
 from Protocol.Messages.Client.SearchAlliancesMessage import SearchAlliancesMessage
 from Protocol.Messages.Client.ChatToAllianceStreamMessage import ChatToAllianceStreamMessage
 from Protocol.Messages.Client.PlayerStatusMessage import PlayerStatusMessage
+from Protocol.Messages.Client.HomeBattleReplayMessage import HomeBattleReplayMessage
 
 packets = {
     10101: LoginMessage,
@@ -33,6 +34,7 @@ packets = {
     14109: GoHomeFromOfflinePractiseMessage,
     14110: AskForBattleEndMessage,
     14113: GetPlayerProfileMessage,
+    14114: HomeBattleReplayMessage,
     14301: CreateAllianceMessage,
     14302: AskForAllianceDataMessage,
     14303: AskForJoinableAlliancesListMessage,
